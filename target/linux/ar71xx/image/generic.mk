@@ -1032,6 +1032,14 @@ define Device/xd3200
 endef
 TARGET_DEVICES += xd3200
 
+define Device/xd6700
+  $(Device/sr3200)
+  DEVICE_TITLE := YunCore XD6700
+  DEVICE_PACKAGES := kmod-ath10k ath10k-firmware-qca9887
+  BOARDNAME = XD6700
+endef
+TARGET_DEVICES += xd6700
+
 define Device/t830
   DEVICE_TITLE := YunCore T830
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport
