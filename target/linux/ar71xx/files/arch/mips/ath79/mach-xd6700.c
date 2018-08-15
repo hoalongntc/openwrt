@@ -29,6 +29,7 @@
 
 #define XD6700_GPIO_LED_SYSTEM      1
 
+#define XD6700_GPIO_LED_BLUE       11
 #define XD6700_GPIO_LED_GREEN      12
 #define XD6700_GPIO_LED_RED        13
 
@@ -43,6 +44,14 @@ static struct gpio_led xd6700_leds_gpio[] __initdata = {
 	{
 		.name   = "xd6700:green:system",
 		.gpio   = XD6700_GPIO_LED_SYSTEM,
+		.active_low = 1,
+	}, {
+		.name   = "xd6700:blue:system",
+		.gpio   = XD6700_GPIO_LED_BLUE,
+		.active_low = 1,
+	}, {
+		.name   = "xd6700:blue:14",
+		.gpio   = 14,
 		.active_low = 1,
 	}, {
 		.name   = "xd6700:green:wlan2g",
