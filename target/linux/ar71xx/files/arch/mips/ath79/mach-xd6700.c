@@ -44,7 +44,7 @@ static struct gpio_led xd6700_leds_gpio[] __initdata = {
                 .name           = "xd6700:green:system",
                 .gpio           = XD6700_GPIO_LED_SYSTEM,
                 .active_low     = 1,
-        }, { 
+        }, {
                 .name           = "xd6700:green:wlan2g",
                 .gpio           = XD6700_GPIO_LED_GREEN,
                 .active_low     = 1,
@@ -94,15 +94,15 @@ static void __init xd6700_setup(void)
 	ath79_eth0_data.duplex = DUPLEX_FULL;
 	ath79_eth0_data.speed = SPEED_1000;
 	ath79_eth0_data.phy_mask = BIT(4);
-	ath79_init_mac(ath79_eth0_data.mac_addr, art, 1);
+	ath79_init_mac(ath79_eth0_data.mac_addr, art, 0);
 	ath79_register_eth(0);
 
 	/* LAN */
 	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_GMII;
 	ath79_eth1_data.duplex = DUPLEX_FULL;
-	ath79_eth0_data.speed = SPEED_1000;
+	ath79_eth1_data.speed = SPEED_1000;
 	ath79_switch_data.phy_poll_mask |= BIT(4);
-	ath79_init_mac(ath79_eth1_data.mac_addr, art, 0);
+	ath79_init_mac(ath79_eth1_data.mac_addr, art, 1);
 	ath79_register_eth(1);
 }
 
