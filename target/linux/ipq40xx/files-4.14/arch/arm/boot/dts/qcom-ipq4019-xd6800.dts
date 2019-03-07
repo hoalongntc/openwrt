@@ -1,0 +1,310 @@
+/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2018, Sven Eckelmann <sven.eckelmann@openmesh.com>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ */
+
+#include "qcom-ipq4019.dtsi"
+#include "qcom-ipq4019-bus.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/soc/qcom,tcsr.h>
+
+/ {
+    model = "Yuncore XD6800";
+    compatible = "yuncore,xd6800", "qcom,ipq4019";
+
+    aliases {
+        ethernet0 = "/soc/edma@c080000/gmac1";
+        ethernet1 = "/soc/edma@c080000/gmac0";
+    };
+
+    chosen {
+        bootargs-append = " clk_ignore_unused";
+    };
+
+    soc {
+        pinctrl@1000000 {
+            serial_0_pins: serial_pinmux { /* serial_pinmux */
+                mux {
+                    pins = "gpio16", "gpio17";
+                    function = "blsp_uart0";
+                    bias-disable;
+                };
+            };
+
+            serial_1_pins: serial1_pinmux {
+                mux {
+                    pins = "gpio8", "gpio9";
+                    function = "blsp_uart1";
+                    bias-disable;
+                };
+            };
+
+            spi_0_pins: spi_0_pinmux {
+                pinmux {
+                    function = "blsp_spi0";
+                    pins = "gpio13", "gpio14", "gpio15";
+                };
+                pinmux_cs {
+                    function = "gpio";
+                    pins = "gpio12";
+                };
+                pinconf {
+                    pins = "gpio13", "gpio14", "gpio15";
+                    drive-strength = <12>;
+                    bias-disable;
+                };
+                pinconf_cs {
+                    pins = "gpio12";
+                    drive-strength = <2>;
+                    bias-disable;
+                    output-high;
+                };
+            };
+
+            i2c_0_pins: i2c_0_pinmux {
+                pins = "gpio20", "gpio21";
+                function = "blsp_i2c0";
+                bias-disable;
+            };
+        };
+
+        spi@78b5000 {
+            compatible = "qcom,spi-qup-v2.2.1";
+            #address-cells = <0x00000001>;
+            #size-cells = <0x00000000>;
+            pinctrl-0 = <&spi_0_pins>;
+            pinctrl-names = "default";
+            status = "ok";
+            cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+
+            mx25l25635e@0 {
+                #address-cells = <1>;
+                #size-cells = <1>;
+                reg = <0>;
+                compatible = "mx25l25635e";
+                spi-max-frequency = <24000000>;
+
+                partitions {
+                    compatible = "fixed-partitions";
+                    #address-cells = <1>;
+                    #size-cells = <1>;
+
+                    SBL1@0 {
+                        label = "0:SBL1";
+                        reg = <0x00000000 0x00040000>;
+                        read-only;
+                    };
+                    MIBIB@40000 {
+                        label = "0:MIBIB";
+                        reg = <0x00040000 0x00020000>;
+                        read-only;
+                    };
+                    QSEE@60000 {
+                        label = "0:QSEE";
+                        reg = <0x00060000 0x00060000>;
+                        read-only;
+                    };
+                    CDT@c0000 {
+                        label = "0:CDT";
+                        reg = <0x000c0000 0x00010000>;
+                        read-only;
+                    };
+                    DDRPARAMS@d0000 {
+                        label = "0:DDRPARAMS";
+                        reg = <0x000d0000 0x00010000>;
+                        read-only;
+                    };
+                    u-boot-env@e0000 {
+                        label = "0:APPSBLENV"; /* uboot env*/
+                        reg = <0x000e0000 0x00010000>;
+                        read-only;
+                    };
+                    u-boot@f0000 {
+                        label = "0:APPSBL"; /* uboot */
+                        reg = <0x000f0000 0x00080000>;
+                        read-only;
+                    };
+                    art@170000 {
+                        label = "0:ART";
+                        reg = <0x00170000 0x00010000>;
+                        read-only;
+                    };
+                    kernel@180000 {
+                        label = "kernel";
+                        reg = <0x00180000 0x00400000>;
+                    };
+                    rootfs@580000 {
+                        label = "rootfs";
+                        reg = <0x00580000 0x01600000>;
+                    };
+                    firmware@180000 {
+                        label = "firmware";
+                        reg = <0x00180000 0x01a00000>;
+                    };
+                };
+            };
+        };
+
+        i2c@78b7000 {
+            compatible = "qcom,i2c-msm-v2";
+            #address-cells = <0x00000001>;
+            #size-cells = <0x00000000>;
+            pinctrl-0 = <&i2c_0_pins>;
+            pinctrl-1 = <&i2c_0_pins>;
+            pinctrl-names = "i2c_active", "i2c_sleep";
+            status = "ok";
+        };
+
+        serial@78af000 {
+            pinctrl-0 = <&serial_0_pins>;
+            pinctrl-names = "default";
+            status = "ok";
+        };
+
+        serial@78b0000 {
+            pinctrl-0 = <&serial_1_pins>;
+            pinctrl-names = "default";
+            status = "ok";
+        };
+
+        rng@22000 {
+            compatible = "qcom,prng";
+            status = "ok";
+        };
+
+        tcsr@194b000 {
+            /* select hostmode */
+            compatible = "qcom,tcsr";
+            reg = <0x194b000 0x100>;
+            qcom,usb-hsphy-mode-select = <TCSR_USB_HSPHY_HOST_MODE>;
+            status = "ok";
+        };
+
+        ess_tcsr@1953000 {
+            compatible = "qcom,tcsr";
+            reg = <0x1953000 0x1000>;
+            qcom,ess-interface-select = <TCSR_ESS_PSGMII>;
+        };
+
+        tcsr@1949000 {
+            compatible = "qcom,tcsr";
+            reg = <0x1949000 0x100>;
+            qcom,wifi_glb_cfg = <TCSR_WIFI_GLB_CFG>;
+        };
+
+        tcsr@1957000 {
+            compatible = "qcom,tcsr";
+            reg = <0x1957000 0x100>;
+            qcom,wifi_noc_memtype_m0_m2 = <TCSR_WIFI_NOC_MEMTYPE_M0_M2>;
+        };
+
+        dma@7884000 {
+            compatible = "qcom,bam-v1.7.0";
+            qcom,ee = <0x00000000>;
+            status = "ok";
+        };
+
+        dma@8e04000 {
+            compatible = "qcom,bam-v1.7.0";
+            qcom,ee = <0x00000001>;
+            qcom,controlled-remotely;
+            status = "ok";
+        };
+
+        crypto@8e3a000 {
+            compatible = "qcom,crypto-v5.1";
+            status = "ok";
+        };
+
+        qcom,nand@7980000 {
+            status = "disabled";
+        };
+
+        watchdog@b017000 {
+            status = "ok";
+        };
+
+        /* usb */
+        ssphy@9a000 {
+            status = "ok";
+        };
+        hsphy@a6000 {
+            status = "ok";
+        };
+        hsphy@a8000 {
+            status = "ok";
+        };
+        usb3@8af8800 {
+            status = "ok";
+        };
+        usb2@60f8800 {
+            status = "ok";
+        };
+
+        /* ethernet */
+        mdio@90000 {
+            compatible = "qcom,ipq4019-mdio";
+            #address-cells = <0x00000001>;
+            #size-cells = <0x00000001>;
+            status = "ok";
+        };
+        ess-switch@c000000 {
+            compatible = "qcom,ess-switch";
+            status = "ok";
+        };
+        ess-psgmii@98000 {
+            compatible = "qcom,ess-psgmii";
+            psgmii_access_mode = "local bus";
+            status = "ok";
+        };
+        edma@c080000 {
+            status = "ok";
+        };
+
+        /* wireless */
+        wifi@a000000 {
+            compatible = "qcom,ipq4019-wifi";
+            status = "ok";
+        };
+        wifi@a800000 {
+            compatible = "qcom,ipq4019-wifi";
+            status = "ok";
+        };
+        pci@40000000 {
+            perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+            wake-gpio = <&tlmm 50 GPIO_ACTIVE_LOW>;
+            status = "ok";
+
+            pcie@0 {
+                reg = <0 0 0 0 0>;
+                #interrupt-cells = <1>;
+                #size-cells = <2>;
+                #address-cells = <3>;
+                device_type = "pci";
+
+                wifi2: ath10k@0,0 {
+                    reg = <0 0 0 0 0>;
+                    compatible = "qcom,ath10k";
+                    status = "ok";
+                    device_type = "pci";
+                    qcom,mtd-name = "0:ART";
+                    qcom,cal-offset = <0x00009000>;
+                    qcom,cal-len = <0x00002f20>;
+                };
+            };
+        };
+    };
+};

@@ -205,6 +205,19 @@ define Device/qcom_ap-dk04.1-c1
 endef
 TARGET_DEVICES += qcom_ap-dk04.1-c1
 
+define Device/yuncore_xd6800
+	DEVICE_TITLE := Yuncode XD6800
+	BOARD_NAME := xd6800
+	DEVICE_DTS := qcom-ipq4019-xd6800
+	KERNEL_SIZE := 4096k
+	IMAGE_SIZE := 26624k
+	$(call Device/FitImage)
+	IMAGES := sysupgrade.bin
+	IMAGE/sysupgrade.bin := append-kernel | pad-to $$$${KERNEL_SIZE} | append-rootfs | pad-rootfs | append-metadata
+	DEVICE_PACKAGES := ath10k-firmware-qca9888
+endef
+TARGET_DEVICES += yuncore_xd6800
+
 define Device/zyxel_wre6606
 	$(call Device/FitImage)
 	DEVICE_TITLE := ZyXEL WRE6606
