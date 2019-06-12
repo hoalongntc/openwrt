@@ -112,7 +112,8 @@ case "$FIRMWARE" in
 	;;
 "ath10k/pre-cal-pci-0000:01:00.0.bin")
 	case "$board" in
-	openmesh,a62)
+	openmesh,a62 |\
+	yuncore,xd6800)
 		ath10kcal_extract "0:ART" 36864 12064
 		;;
 	esac
@@ -143,7 +144,8 @@ case "$FIRMWARE" in
 		;;
 	compex,wpj428 |\
 	openmesh,a42 |\
-	openmesh,a62)
+	openmesh,a62 |\
+	yuncore,xd6800)
 		ath10kcal_extract "0:ART" 4096 12064
 		;;
 	zyxel,wre6606)
@@ -178,7 +180,8 @@ case "$FIRMWARE" in
 		;;
 	compex,wpj428 |\
 	openmesh,a42 |\
-	openmesh,a62)
+	openmesh,a62 |\
+	yuncore,xd6800)
 		ath10kcal_extract "0:ART" 20480 12064
 		;;
 	zyxel,wre6606)
