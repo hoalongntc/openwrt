@@ -178,6 +178,15 @@ define Device/bsb
 endef
 TARGET_DEVICES += bsb
 
+define Device/bl270q
+  DEVICE_TITLE := Sailsky BL270Q
+  DEVICE_PACKAGES := kmod-ath10k ath10k-firmware-qca9887
+  BOARDNAME := BL270Q
+  IMAGE_SIZE := 16000k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env),16000k(firmware),64k(art)ro
+endef
+TARGET_DEVICES += bl270q
+
 define Device/carambola2
   DEVICE_TITLE := 8devices Carambola2
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2

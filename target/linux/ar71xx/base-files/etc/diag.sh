@@ -23,6 +23,7 @@ get_status_led() {
 	antminer-s1|\
 	antminer-s3|\
 	antminer-r1|\
+	bl270q|\
 	e1700ac-v2|\
 	e558-v2|\
 	e600gac-v2|\

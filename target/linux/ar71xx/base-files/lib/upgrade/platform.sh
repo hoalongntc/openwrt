@@ -217,6 +217,7 @@ platform_check_image() {
 	archer-c7-v4|\
 	archer-c7-v5|\
 	bullet-m|\
+	bl270q|\
 	c-55|\
 	carambola2|\
 	cf-e316n-v2|\
