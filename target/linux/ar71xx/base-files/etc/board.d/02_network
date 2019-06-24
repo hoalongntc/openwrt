@@ -157,6 +157,7 @@ ar71xx_setup_interfaces()
 	alfa-ap96|\
 	alfa-nx|\
 	archer-c25-v1|\
+	bl270q|\
 	dr344|\
 	gl-ar150|\
 	gl-ar300m|\

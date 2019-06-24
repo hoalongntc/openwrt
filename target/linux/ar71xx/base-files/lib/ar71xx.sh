@@ -527,6 +527,9 @@ ar71xx_board_detect() {
 		name="bullet-m"
 		ubnt_xm_board_detect
 		;;
+	*"BL270Q")
+		name="bl270q"
+		;;
 	*"BXU2000n-2 rev. A1")
 		name="bxu2000n-2-a1"
 		;;
