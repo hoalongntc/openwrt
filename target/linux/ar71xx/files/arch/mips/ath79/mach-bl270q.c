@@ -29,9 +29,6 @@
 
 #define BL270Q_GPIO_LED_SYSTEM 1
 
-#define BL270Q_GPIO_LED_GREEN 12
-#define BL270Q_GPIO_LED_RED 13
-
 #define BL270Q_GPIO_BTN_RESET 17
 
 #define BL270Q_KEYS_POLL_INTERVAL 20 /* msecs */
@@ -59,7 +56,8 @@ static struct gpio_keys_button bl270q_gpio_keys[] __initdata = {
 static void __init bl270q_setup(void)
 {
 	u8 *art = (u8 *)KSEG1ADDR(0x1fff0000);
-	u8 *mac = (u8 *)KSEG1ADDR(0x1f046100);
+	u8 *mac0 = (u8 *)KSEG1ADDR(0x1f040610);
+	u8 *mac1 = (u8 *)KSEG1ADDR(0x1f040620);
 
 	ath79_register_m25p80(NULL);
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(bl270q_leds_gpio),
@@ -82,7 +80,7 @@ static void __init bl270q_setup(void)
 	ath79_eth0_data.duplex = DUPLEX_FULL;
 	ath79_eth0_data.speed = SPEED_1000;
 	ath79_eth0_data.phy_mask = BIT(4);
-	ath79_init_mac(ath79_eth0_data.mac_addr, mac, 0);
+	ath79_init_mac(ath79_eth0_data.mac_addr, mac0, 0);
 	ath79_register_eth(0);
 
 	/* LAN */
@@ -90,7 +88,7 @@ static void __init bl270q_setup(void)
 	ath79_eth1_data.duplex = DUPLEX_FULL;
 	ath79_eth1_data.speed = SPEED_1000;
 	ath79_switch_data.phy_poll_mask |= BIT(4);
-	ath79_init_mac(ath79_eth1_data.mac_addr, mac, 1);
+	ath79_init_mac(ath79_eth1_data.mac_addr, mac1, 0);
 	ath79_register_eth(1);
 }
 
